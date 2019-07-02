@@ -1,0 +1,40 @@
+# OS specific and system editor specific
+*.DS_Store
+*~
+Thumbs.db
+.swp
+.editorconfig
+
+# Project output
+*.tar.gz
+*.zip
+*.jar
+*.class
+*.log
+logs
+log
+lib
+build
+target
+hs_err_pid*
+
+# Eclipse artifacts and output dirs
+.metadata
+.settings
+.target
+.build
+.project
+.classpath
+
+# IDEA artifacts and output dirs
+.idea
+*.iws
+*.ipr
+*.iml
+out
+test-output
+
+# Git and maven
+.git
+.gitignore
+settings.xml
