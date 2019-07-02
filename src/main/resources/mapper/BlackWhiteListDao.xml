@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyx.host.dao.BlackWhiteListDao">
+	<select id="findBlackWhiteListById" parameterType="long" resultType="com.zyx.host.entity.BlackWhiteList">
+		select *
+		from tb_black_white_lists
+		where mid=#{mId}
+	</select>
+
+	<select id="queryBlackWhiteList" resultType="com.zyx.host.entity.BlackWhiteList">
+		select *
+		from tb_black_white_lists
+	</select>
+	
+	<select id="findBlackWhiteListByType" parameterType="int" resultType="com.zyx.host.entity.BlackWhiteList">
+		select *
+		from tb_black_white_lists
+		where iswhite=#{isWhite}
+	</select>
+	
+	<insert id="insertBlackWhiteList">
+		INSERT INTO
+		tb_black_white_lists(mid,sid,iswhite,lip,lname,
+		adder,personInCharge,description,updateTime)
+		VALUES
+		(#{mId},#{sId},#{isWhite},#{lIp},#{lName},#{adder},
+		#{personInCharge},#{description},#{updateTime})
+	</insert>
+	
+	<update id="updateBlackWhiteList" parameterType="com.zyx.host.entity.BlackWhiteList">
+		update tb_black_white_lists
+		<set>
+			<if test="sId != null">sid=#{sId}</if>
+			<if test="isWhite != null">iswhite=#{isWhite},</if>
+			<if test="lIp != null">lip=#{lIp},</if>
+			<if test="lName != null">lname=#{lName},</if>
+			<if test="adder != null">adder=#{adder},</if>
+			<if test="personInCharge != null">personInCharge=#{personInCharge},</if>
+			<if test="description != null">description=#{description},</if>
+			<if test="updateTime != null">updateTime=#{updateTime}</if>
+		</set>
+		where mid=#{mId}
+	</update>
+	
+	<update id="updateWhite" parameterType="long">
+		update tb_black_white_lists
+		set iswhite=1
+		where mid=#{mId}
+	</update>
+	
+	<update id="updateBlack" parameterType="long">
+		update tb_black_white_lists
+		set iswhite=2
+		where mid=#{mId}
+	</update>
+	
+	<delete id="deleteBlackWhiteList">
+		DELETE FROM
+		tb_black_white_lists
+		WHERE
+		mid =
+		#{mId}
+	</delete>
+	<delete id="batchDeleteBlackWhiteList" parameterType="long">
+		DELETE FROM
+		tb_black_white_lists
+		WHERE mid IN
+		<foreach collection="list" item="mId" open="(" separator=","
+			close=")">
+			#{mId}
+		</foreach>
+	</delete>
+</mapper>

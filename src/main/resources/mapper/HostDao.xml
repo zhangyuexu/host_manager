@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyx.host.dao.HostDao">
+	<select id="queryHost" resultType="com.zyx.host.entity.Machine">
+		select m_id,m_name,m_ip,m_room,
+		healthy_status_code,blong_tree,m_type,business_type,owner,use_type,update_time,cpu_rate,
+		disk_rate,mem_rate,description,product_line,
+		service_code,valid,u_id,white_id
+		from tb_machine
+		order by m_id desc
+	</select>
+	
+	<select id="findHostByCondition" resultType="com.zyx.host.entity.Machine">
+		select * 
+		from tb_machine
+		<where>
+			<if test="valid != null">
+				and valid=#{valid}
+			</if>
+			<if test="healthyStatusCode != null">
+				and healthy_status_code=#{healthyStatusCode}
+			</if>
+		</where>
+		order by m_id desc
+	</select>
+	
+	<select id="findHostById" resultType="com.zyx.host.entity.Machine">
+		select * 
+		from tb_machine
+		where m_id=#{mId}
+	</select>
+	
+	<select id="findHostByuId" resultType="com.zyx.host.entity.Machine">
+		select * 
+		from tb_machine
+		where u_id=#{uId}
+	</select>
+	
+	<insert id="insertMachine" useGeneratedKeys="true" keyProperty="mId"
+		keyColumn="m_id">
+		INSERT INTO
+		tb_machine(m_name,m_ip,m_room,
+		healthy_status_code,blong_tree,m_type,business_type,owner,use_type,update_time,cpu_rate,
+		disk_rate,mem_rate,description,product_line,
+		service_code,valid,u_id,white_id)
+		VALUES
+		(#{mName},#{mIp},#{mRoom},#{healthyStatusCode},#{blongTree},#{mType},#{businessType},#{owner},#{useType},
+		#{updateTime},#{cpuRate},#{diskRate},#{memRate},#{description},#{productLine},
+		#{serviceCode},#{valid},#{uId},#{whiteId})
+	</insert>
+	<update id="updateMachine" parameterType="com.zyx.host.entity.Machine">
+		update tb_machine
+		<set>
+			<if test="mName != null">m_name=#{mName},</if>
+			<if test="mIp != null">m_ip=#{mIp},</if>
+			<if test="mRoom != null">m_room=#{mRoom},</if>
+			<if test="healthyStatusCode != null">healthy_status_code=#{healthyStatusCode},</if>
+			<if test="blongTree != null">blong_tree=#{blongTree},</if>
+			<if test="mType != null">m_type=#{mType},</if>
+			<if test="businessType != null">business_type=#{businessType},</if>
+			<if test="owner != null">owner=#{owner},</if>
+			<if test="useType != null">use_type=#{useType},</if>
+			<if test="updateTime != null">update_time=#{updateTime},</if>
+			<if test="cpuRate != null">cpu_rate=#{cpuRate},</if>
+			<if test="diskRate != null">disk_rate=#{diskRate},</if>
+			<if test="memRate != null">mem_rate=#{memRate},</if>
+			<if test="description != null">description=#{description},</if>
+			<if test="productLine !=null">product_line=#{productLine},</if>
+			<if test="serviceCode != null">service_code=#{serviceCode},</if>
+			<if test="valid != null">valid=#{valid},</if>
+			<if test="uId != null">u_id=#{uId},</if>
+			<if test="whiteId != null">white_id=#{whiteId}</if>
+		</set>
+		where m_id=#{mId}
+	</update>
+	
+	<update id="updateMachineByIp" parameterType="com.zyx.host.entity.Machine">
+		update tb_machine
+		<set>
+			<if test="mId != null">m_id=#{mId},</if>
+			<if test="mName != null">m_name=#{mName},</if>
+			<if test="mRoom != null">m_room=#{mRoom},</if>
+			<if test="healthyStatusCode != null">healthy_status_code=#{healthyStatusCode},</if>
+			<if test="blongTree != null">blong_tree=#{blongTree},</if>
+			<if test="mType != null">m_type=#{mType},</if>
+			<if test="businessType != null">business_type=#{businessType},</if>
+			<if test="owner != null">owner=#{owner},</if>
+			<if test="useType != null">use_type=#{useType},</if>
+			<if test="updateTime != null">update_time=#{updateTime},</if>
+			<if test="cpuRate != null">cpu_rate=#{cpuRate},</if>
+			<if test="diskRate != null">disk_rate=#{diskRate},</if>
+			<if test="memRate != null">mem_rate=#{memRate},</if>
+			<if test="description != null">description=#{description},</if>
+			<if test="productLine !=null">product_line=#{productLine},</if>
+			<if test="serviceCode != null">service_code=#{serviceCode},</if>
+			<if test="valid != null">valid=#{valid},</if>
+			<if test="uId != null">u_id=#{uId},</if>
+			<if test="whiteId != null">white_id=#{whiteId}</if>
+		</set>
+		where m_ip=#{mIp}
+	</update>
+	<delete id="deleteMachine">
+		DELETE FROM
+		tb_machine
+		WHERE
+		m_id =
+		#{mId}
+	</delete>
+	
+	<delete id="deleteMachineByIp" parameterType="String">
+		DELETE FROM
+		tb_machine
+		WHERE
+		m_ip=#{mIp}
+	</delete>
+	
+	<delete id="batchDeleteMachine" parameterType="long">
+		DELETE FROM
+		tb_machine
+		WHERE m_id IN
+		<foreach collection="list" item="mId" open="(" separator=","
+			close=")">
+			#{mId}
+		</foreach>
+	</delete>
+</mapper>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyx.host.dao.UserDao">
+	<select id="findUserById" parameterType="long" resultType="com.zyx.host.entity.User">
+		select *
+		from tb_user
+		where u_id=#{uId}
+	</select>
+
+	<select id="queryUser" resultType="com.zyx.host.entity.User">
+		select *
+		from tb_user
+		order by u_group
+	</select>
+	
+	<select id="findUserApplyByStatus" parameterType="int" resultType="com.zyx.host.entity.User">
+		select *
+		from tb_user
+		where status=#{status}
+	</select>
+	
+	<select id="findUserByCondition" resultType="com.zyx.host.entity.User">
+		select * 
+		from tb_user
+		<where>
+			<if test="status != null">
+				and status=#{status}
+			</if>
+			<if test="uGroup != null">
+				and u_group=#{uGroup}
+			</if>
+		</where>
+		order by u_group
+	</select>
+	
+	<insert id="insertUser" useGeneratedKeys="true" keyProperty="uId"
+		keyColumn="u_id">
+		INSERT INTO
+		tb_user(u_name,u_role,u_right,u_group,status)
+		VALUES
+		(#{uName},#{uRole},#{uRight},#{uGroup},#{status})
+	</insert>
+	<update id="updateUser" parameterType="com.zyx.host.entity.User">
+		update tb_user
+		<set>
+			<if test="uName != null">u_name=#{uName},</if>
+			<if test="uRole != null">u_role=#{uRole},</if>
+			<if test="uRight != null">u_right=#{uRight},</if>
+			<if test="uGroup != null">u_group=#{uGroup},</if>
+			<if test="status != null">status=#{status}</if>
+		</set>
+		where u_id=#{uId}
+	</update>
+	
+	<update id="updateUserApplypass" parameterType="long">
+		update tb_user
+		set status=2
+		where u_id=#{uId}
+	</update>
+	
+	<update id="updateUserApplyfail" parameterType="long">
+		update tb_user
+		set status=3
+		where u_id=#{uId}
+	</update>
+	
+	<delete id="deleteUser">
+		DELETE FROM
+		tb_user
+		WHERE
+		u_id =
+		#{uId}
+	</delete>
+	<delete id="batchDeleteUser" parameterType="long">
+		DELETE FROM
+		tb_user
+		WHERE u_id IN
+		<foreach collection="list" item="uId" open="(" separator=","
+			close=")">
+			#{uId}
+		</foreach>
+	</delete>
+</mapper>

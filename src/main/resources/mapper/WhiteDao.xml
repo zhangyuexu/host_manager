@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyx.host.dao.WhiteDao">
+	<select id="findWhiteById" parameterType="long" resultType="com.zyx.host.entity.White">
+		select *
+		from tb_white
+		where white_id=#{whiteId}
+	</select>
+
+	<select id="queryWhite" resultType="com.zyx.host.entity.White">
+		select *
+		from tb_white
+	</select>
+	
+	<select id="findWhiteApplyByStatus" parameterType="int" resultType="com.zyx.host.entity.White">
+		select *
+		from tb_white
+		where status=#{status}
+	</select>
+	
+	<insert id="insertWhite" useGeneratedKeys="true" keyProperty="whiteId"
+		keyColumn="white_id">
+		INSERT INTO
+		tb_white(white_type,white_blong_tree,status,valid,white_ips,
+		white_host_names,apply_person,update_time,u_id,m_id)
+		VALUES
+		(#{whiteType},#{whiteBlongTree},#{status},#{valid},#{whiteIps},#{whiteHostNames},
+		#{applyPerson},#{updateTime},#{uId},#{mId})
+	</insert>
+	<update id="updateWhite" parameterType="com.zyx.host.entity.White">
+		update tb_white
+		<set>
+			<if test="whiteType != null">white_type=#{whiteType},</if>
+			<if test="whiteBlongTree != null">white_blong_tree=#{whiteBlongTree},</if>
+			<if test="status != null">status=#{status},</if>
+			<if test="valid != null">valid=#{valid},</if>
+			<if test="whiteIps != null">white_ips=#{whiteIps},</if>
+			<if test="whiteHostNames != null">white_host_names=#{whiteHostNames},</if>
+			<if test="applyPerson != null">apply_person=#{applyPerson},</if>
+			<if test="updateTime != null">update_time=#{updateTime},</if>
+			<if test="uId != null">u_id=#{uId},</if>
+			<if test="mId != null">m_id=#{mId}</if>
+		</set>
+		where white_id=#{whiteId}
+	</update>
+	
+	<update id="updateWhiteApplypass" parameterType="long">
+		update tb_white
+		set status=2
+		where white_id=#{whiteId}
+	</update>
+	
+	<update id="updateWhiteApplyfail" parameterType="long">
+		update tb_white
+		set status=3
+		where white_id=#{whiteId}
+	</update>
+	
+	<delete id="deleteWhite">
+		DELETE FROM
+		tb_white
+		WHERE
+		white_id =
+		#{whiteId}
+	</delete>
+	<delete id="batchDeleteWhite" parameterType="long">
+		DELETE FROM
+		tb_white
+		WHERE white_id IN
+		<foreach collection="list" item="whiteId" open="(" separator=","
+			close=")">
+			#{whiteId}
+		</foreach>
+	</delete>
+</mapper>

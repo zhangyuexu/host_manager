@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyx.host.dao.MachineAuditDao">
+	<select id="findMachineAuditById" parameterType="long" resultType="com.zyx.host.entity.MachineAudit">
+		select *
+		from tb_machine_audit
+		where audit_id=#{auditId}
+	</select>
+	
+	<select id="findMachineAuditByCondition" parameterType="int" resultType="com.zyx.host.entity.MachineAudit">
+		select *
+		from tb_machine_audit
+		where status=#{status}
+	</select>
+
+	<select id="queryMachineAudit" resultType="com.zyx.host.entity.MachineAudit">
+		select *
+		from tb_machine_audit
+	</select>
+	
+	<insert id="insertMachineAudit" useGeneratedKeys="true" keyProperty="auditId"
+		keyColumn="auditId">
+		INSERT INTO
+		tb_machine_audit(audit_name,status,m_id,u_id)
+		VALUES
+		(#{auditName},#{status},#{mId},#{uId})
+	</insert>
+	<update id="updateMachineAudit" parameterType="com.zyx.host.entity.MachineAudit">
+		update tb_machine_audit
+		<set>
+			<if test="auditName != null">audit_name=#{auditName},</if>
+			<if test="status != null">status=#{status},</if>
+			<if test="mId != null">m_id=#{mId},</if>
+			<if test="uId != null">u_id=#{uId}</if>
+		</set>
+		where audit_id=#{auditId}
+	</update>
+	<delete id="deleteMachineAudit">
+		DELETE FROM
+		tb_machine_audit
+		WHERE
+		audit_id =
+		#{auditId}
+	</delete>
+	<delete id="batchDeleteMachineAudit" parameterType="long">
+		DELETE FROM
+		tb_machine_audit
+		WHERE audit_id IN
+		<foreach collection="list" item="auditId" open="(" separator=","
+			close=")">
+			#{auditId}
+		</foreach>
+	</delete>
+</mapper>

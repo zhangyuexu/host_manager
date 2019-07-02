@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyx.host.dao.PublicPublicBlackWhiteListDao">
+	<select id="findPublicBlackWhiteListByIp" parameterType="String" resultType="com.zyx.host.entity.PublicBlackWhiteList">
+		select *
+		from tb_public_black_white_lists
+		where lip=#{lIp}
+	</select>
+
+	<select id="queryPublicBlackWhiteList" resultType="com.zyx.host.entity.PublicBlackWhiteList">
+		select *
+		from tb_public_black_white_lists
+	</select>
+	
+	<select id="findPublicBlackWhiteListByType" parameterType="int" resultType="com.zyx.host.entity.PublicBlackWhiteList">
+		select *
+		from tb_public_black_white_lists
+		where publicListType=#{publicListType}
+	</select>
+	
+	<insert id="insertPublicBlackWhiteList">
+		INSERT INTO
+		tb_public_black_white_lists(lip,lname,iswhite,personInCharge,description,
+		updateTime,publicListType)
+		VALUES
+		(#{lIp},#{lName},#{isWhite},
+		#{personInCharge},#{description},#{updateTime},#{publicListType})
+	</insert>
+	
+	<update id="updatePublicBlackWhiteList" parameterType="com.zyx.host.entity.PublicBlackWhiteList">
+		update tb_public_black_white_lists
+		<set>
+			<if test="lName != null">lname=#{lName}</if>
+			<if test="isWhite != null">iswhite=#{isWhite},</if>
+			<if test="personInCharge != null">personInCharge=#{personInCharge},</if>
+			<if test="description != null">description=#{description},</if>
+			<if test="updateTime != null">updateTime=#{updateTime},</if>
+			<if test="publicListType != null">publicListType=#{publicListType}</if>
+		</set>
+		where lip=#{lIp}
+	</update>
+	
+	<update id="updateWhiteQA" parameterType="String">
+		update tb_public_black_white_lists
+		set publicListType=1
+		where lip=#{lIp}
+	</update>
+	
+	<update id="updateWhiteRD" parameterType="String">
+		update tb_public_black_white_lists
+		set publicListType=2
+		where lip=#{lIp}
+	</update>
+	
+	<delete id="deletePublicBlackWhiteList">
+		DELETE FROM
+		tb_public_black_white_lists
+		WHERE
+		lip =
+		#{lIp}
+	</delete>
+	<delete id="batchDeletePublicBlackWhiteList" parameterType="long">
+		DELETE FROM
+		tb_public_black_white_lists
+		WHERE lip IN
+		<foreach collection="list" item="lIp" open="(" separator=","
+			close=")">
+			#{lIp}
+		</foreach>
+	</delete>
+</mapper>
